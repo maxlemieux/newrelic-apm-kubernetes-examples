@@ -1,0 +1,16 @@
+# This is a sample newrelic.yml file that will be included in the ConfigMap.
+# Replace the contents of this file with your actual New Relic configuration.
+
+common: &default_settings
+  license_key: 'your_license_key_here'
+  app_name: 'My Java Application'
+  ...
+
+# Add any environment-specific settings under the appropriate section.
+development:
+  <<: *default_settings
+  ...
+
+production:
+  <<: *default_settings
+  ...
