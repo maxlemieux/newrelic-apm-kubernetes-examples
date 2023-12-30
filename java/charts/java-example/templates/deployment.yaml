@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "newrelic-example.fullname" . }}-client
+  name: {{ include "java-example.fullname" . }}-client
   labels:
-    {{- include "newrelic-example.labels" . | nindent 4 }}
+    {{- include "java-example.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "newrelic-example.name" . }}-client
+      app: {{ include "java-example.name" . }}-client
   template:
     metadata:
       labels:
-        app: {{ include "newrelic-example.name" . }}-client
+        app: {{ include "java-example.name" . }}-client
     spec:
       containers:
         - name: client
@@ -24,18 +24,18 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "newrelic-example.fullname" . }}-server
+  name: {{ include "java-example.fullname" . }}-server
   labels:
-    {{- include "newrelic-example.labels" . | nindent 4 }}
+    {{- include "java-example.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "newrelic-example.name" . }}-server
+      app: {{ include "java-example.name" . }}-server
   template:
     metadata:
       labels:
-        app: {{ include "newrelic-example.name" . }}-server
+        app: {{ include "java-example.name" . }}-server
     spec:
       containers:
         - name: server
