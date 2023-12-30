@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /usr/src/app
 
 # Copy the client's source code into the container
-COPY ./path/to/client/source /usr/src/app
+COPY ../src/Client.java /usr/src/app
 
 # Compile the Java application
 RUN javac com/newrelic/example/NewRelicApiExample.java
