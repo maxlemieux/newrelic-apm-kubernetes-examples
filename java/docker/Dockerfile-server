@@ -1,0 +1,14 @@
+# Use an OpenJDK runtime as the parent image
+FROM openjdk:11-jre-slim
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy the server's source code into the container
+COPY ./path/to/server/source /usr/src/app
+
+# Compile the Java application
+RUN javac com/newrelic/example/NewRelicApiServer.java
+
+# Run the server when the container launches
+CMD ["java", "com.newrelic.example.NewRelicApiServer"]
