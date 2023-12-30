@@ -10,9 +10,11 @@ After checking out this repo, you will need to build the Docker images required 
 
 ```
 cd /path/to/newrelic-apm-kubernetes-examples/java/docker
-docker build -f Dockerfile-server -t your-repo/newrelic-server:latest .
-docker build -f Dockerfile-client -t your-repo/newrelic-client:latest .
-docker login
-docker push your-repo/newrelic-server:latest
-docker push your-repo/newrelic-client:latest
-```
+
+docker login myregistry.azurecr.io
+
+docker build -t mlemieuxacr.azurecr.io/java-example/client:latest -f docker/Dockerfile-client .
+docker push mlemieuxacr.azurecr.io/java-example/client:latest
+
+docker build -t mlemieuxacr.azurecr.io/java-example/server:latest -f docker/Dockerfile-server .
+docker push mlemieuxacr.azurecr.io/java-example/server:latest
