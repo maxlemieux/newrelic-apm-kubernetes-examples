@@ -20,6 +20,17 @@ spec:
           imagePullPolicy: {{ .Values.client.image.pullPolicy }}
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: newrelic-config-volume
+              mountPath: /usr/src/app/newrelic/newrelic.yml
+              subPath: newrelic.yml
+      volumes:
+        - name: newrelic-config-volume
+          configMap:
+            name: {{ include "java-example.fullname" . }}-client-newrelic-config
+            items:
+              - key: newrelic.yml
+                path: newrelic.yml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -45,12 +56,12 @@ spec:
             - containerPort: 8081
           volumeMounts:
             - name: newrelic-config-volume
-              mountPath: /path/to/newrelic.yml
+              mountPath: /usr/src/app/newrelic/newrelic.yml
               subPath: newrelic.yml
       volumes:
         - name: newrelic-config-volume
           configMap:
-            name: {{ include "java-example.fullname" . }}-newrelic-config
+            name: {{ include "java-example.fullname" . }}-server-newrelic-config
             items:
               - key: newrelic.yml
                 path: newrelic.yml

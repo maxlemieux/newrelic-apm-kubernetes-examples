@@ -1,1 +1,3 @@
-java/charts/java-example/files/newrelic.yml
+java/charts/java-example/files/client-newrelic.yml
+java/charts/java-example/files/server-newrelic.yml
+
