@@ -1,15 +1,27 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "java-example.fullname" . }}
+  name: {{ include "newrelic-example.fullname" . }}-client
   labels:
-    {{- include "java-example.labels" . | nindent 4 }}
+    {{- include "newrelic-example.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.client.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - port: {{ .Values.client.service.port }}
+      targetPort: 8080
   selector:
-    {{- include "java-example.selectorLabels" . | nindent 4 }}
+    app: {{ include "newrelic-example.name" . }}-client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "newrelic-example.fullname" . }}-server
+  labels:
+    {{- include "newrelic-example.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.server.service.type }}
+  ports:
+    - port: {{ .Values.server.service.port }}
+      targetPort: 8081
+  selector:
+    app: {{ include "newrelic-example.name" . }}-server
