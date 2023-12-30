@@ -4,7 +4,7 @@
 
 client:
   image:
-    repository: your-repo/newrelic-client
+    repository: myregistry.azurecr.io/java-example/client
     pullPolicy: IfNotPresent
     tag: "latest"
   service:
@@ -13,7 +13,7 @@ client:
 
 server:
   image:
-    repository: your-repo/newrelic-server
+    repository: myregistry.azurecr.io/java-example/server
     pullPolicy: IfNotPresent
     tag: "latest"
   service:

@@ -13,8 +13,8 @@ cd /path/to/newrelic-apm-kubernetes-examples/java/docker
 
 docker login myregistry.azurecr.io
 
-docker build -t mlemieuxacr.azurecr.io/java-example/client:latest -f docker/Dockerfile-client .
-docker push mlemieuxacr.azurecr.io/java-example/client:latest
+docker build -t myregistry.azurecr.io/java-example/client:latest -f docker/Dockerfile-client .
+docker push myregistry.azurecr.io/java-example/client:latest
 
-docker build -t mlemieuxacr.azurecr.io/java-example/server:latest -f docker/Dockerfile-server .
-docker push mlemieuxacr.azurecr.io/java-example/server:latest
+docker build -t myregistry.azurecr.io/java-example/server:latest -f docker/Dockerfile-server .
+docker push myregistry.azurecr.io/java-example/server:latest
