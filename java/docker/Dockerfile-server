@@ -1,14 +1,27 @@
-# Use an OpenJDK runtime as the parent image
-FROM openjdk:11-jre-slim
+# Use an OpenJDK JDK runtime as the parent image
+FROM openjdk:11-jdk-slim
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
+# Install curl and unzip to download and extract dependencies
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+
+# Download the New Relic Java agent ZIP file and extract the JAR files
+RUN curl -o newrelic-java.zip https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
+    unzip newrelic-java.zip -d newrelic && \
+    mv newrelic/newrelic/newrelic.jar ./newrelic-agent.jar && \
+    mv newrelic/newrelic/newrelic-api.jar ./newrelic-api.jar && \
+    rm -rf newrelic newrelic-java.zip
+
+# Download the NanoHTTPD JAR file (replace with the correct version)
+RUN curl -o nanohttpd.jar https://repo1.maven.org/maven2/org/nanohttpd/nanohttpd/2.3.1/nanohttpd-2.3.1.jar
+
 # Copy the server's source code into the container
-COPY ../src/Server.java /usr/src/app
+COPY src/com/newrelic/java-example /usr/src/app/com/newrelic/java-example
 
-# Compile the Java application
-RUN javac com/newrelic/example/NewRelicApiServer.java
+# Compile the Java application with the New Relic agent, New Relic API, and NanoHTTPD on the classpath
+RUN javac -cp ".:newrelic-agent.jar:newrelic-api.jar:nanohttpd.jar" com/newrelic/java-example/NewRelicApiServer.java
 
-# Run the server when the container launches
-CMD ["java", "com.newrelic.example.NewRelicApiServer"]
+# Run the server when the container launches, including the New Relic agent, New Relic API, and NanoHTTPD on the classpath
+CMD ["java", "-cp", ".:newrelic-agent.jar:newrelic-api.jar:nanohttpd.jar", "com.newrelic.java-example.NewRelicApiServer"]
