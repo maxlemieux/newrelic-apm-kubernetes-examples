@@ -1,5 +1,4 @@
-# Use an OpenJDK runtime as the parent image
-FROM openjdk:11-jdk-slim
+FROM eclipse-temurin:21.0.1_12-jdk-jammy
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
