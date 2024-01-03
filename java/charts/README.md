@@ -9,7 +9,10 @@ Server: https://docs.newrelic.com/docs/apm/agents/java-agent/api-guides/java-age
 After checking out this repo, you will need to build the Docker images required for the chart:
 
 ```
-cd /path/to/newrelic-apm-kubernetes-examples/java/docker
+cd ~
+git clone git@github.com:maxlemieux/newrelic-apm-kubernetes-examples.git
+
+cd newrelic-apm-kubernetes-examples/java/docker
 
 docker login myregistry.azurecr.io
 
