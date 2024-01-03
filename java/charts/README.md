@@ -16,8 +16,11 @@ cd newrelic-apm-kubernetes-examples/java/docker
 
 docker login myregistry.azurecr.io
 
-docker build -t myregistry.azurecr.io/java-example/client:latest -f docker/Dockerfile-client .
-docker push myregistry.azurecr.io/java-example/client:latest
+# Start the cross platform build system
+docker buildx create --name mybuilder --use
+docker buildx inspect --bootstrap
 
-docker build -t myregistry.azurecr.io/java-example/server:latest -f docker/Dockerfile-server .
-docker push myregistry.azurecr.io/java-example/server:latest
+# Update this command to use your actual registry name
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry.azurecr.io/java-example-client:latest -f docker/Dockerfile-client . --push
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry.azurecr.io/java-example-server:latest -f docker/Dockerfile-server . --push
+
