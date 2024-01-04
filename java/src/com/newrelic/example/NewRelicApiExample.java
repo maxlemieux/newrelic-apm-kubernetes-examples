@@ -56,27 +56,32 @@ public class NewRelicApiExample extends NanoHTTPD {
     @Trace(dispatcher = true)
     @Override
     public Response serve(IHTTPSession session) {
+        System.out.println("Received request for URI: " + session.getUri());
         URI uri = null;
         int status = 0;
 
         try {
             createDB();
             Thread.sleep(1000);
-            uri = new URI("http://localhost:8081");
+            uri = new URI("http://java-example-newrelic-example-server:8081");
             status = makeExternalCall(uri);
         } catch (URISyntaxException | InterruptedException | IOException e) {
+            System.err.println("Error during request handling: " + e.getMessage());
             e.printStackTrace();
         }
 
         if (status == 200) {
+            System.out.println("Returning successful response.");
             return newFixedLengthResponse("<html><body><h1>Successful Response</h1>\n</body></html>\n");
         } else {
+            System.err.println("Returning error response with status: " + status);
             return newFixedLengthResponse("<html><body><h1>Error\n" + status + "</h1>\n</body></html>\n");
         }
     }
 
     @Trace
     public int makeExternalCall(URI uri) throws IOException {
+        System.out.println("Making external call to URI: " + uri);
         HttpUriRequest request = RequestBuilder.get().setUri(uri).build();
 
         // Wrap the outbound Request object
@@ -105,8 +110,10 @@ public class NewRelicApiExample extends NanoHTTPD {
         TracedMethod tracedMethod = NewRelic.getAgent().getTracedMethod();
         // Report a call to an external HTTP service
         tracedMethod.reportAsExternal(params);
+        int statusCode = response.getStatusLine().getStatusCode();
+        System.out.println("External call to URI " + uri + " returned status code: " + statusCode);
 
-        return response.getStatusLine().getStatusCode();
+        return statusCode;
     }
 
     // Implement Headers interface to create a wrapper for the outgoing Request/incoming Response headers
@@ -161,6 +168,7 @@ public class NewRelicApiExample extends NanoHTTPD {
 
     @Trace
     public void createDB() {
+        System.out.println("Creating or resetting the database.");
         Connection c = null;
         Statement stmt = null;
 
@@ -173,6 +181,7 @@ public class NewRelicApiExample extends NanoHTTPD {
 
             String dropSql = "DROP TABLE IF EXISTS COMPANY;";
             stmt.executeUpdate(dropSql);
+            System.out.println("Dropped existing COMPANY table if it existed.");
 
             String sql = "CREATE TABLE COMPANY " +
                     "(ID INT PRIMARY KEY     NOT NULL," +
@@ -197,10 +206,13 @@ public class NewRelicApiExample extends NanoHTTPD {
             sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
                     "VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 );";
             stmt.executeUpdate(sql);
+            System.out.println("Inserted sample data into COMPANY table.");
 
             stmt.close();
             c.close();
         } catch (Exception e) {
+            System.err.println("Error creating or resetting the database: " + e.getMessage());
+
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }

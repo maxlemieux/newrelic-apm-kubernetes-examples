@@ -119,6 +119,16 @@ public class NewRelicApiServer extends NanoHTTPD {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
+            // Check if the COMPANY table exists and create it if not
+            String sqlCreateTable = "CREATE TABLE IF NOT EXISTS COMPANY " +
+                                    "(ID INT PRIMARY KEY NOT NULL," +
+                                    " NAME TEXT NOT NULL, " +
+                                    " AGE INT NOT NULL, " +
+                                    " ADDRESS CHAR(50), " +
+                                    " SALARY REAL)";
+            stmt.executeUpdate(sqlCreateTable);
+            System.out.println("Table COMPANY created successfully or already exists.");
+
             ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY;");
             while (rs.next()) {
                 int id = rs.getInt("id");

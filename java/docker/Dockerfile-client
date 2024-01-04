@@ -13,8 +13,11 @@ RUN curl -o newrelic-java.zip https://download.newrelic.com/newrelic/java-agent/
     mv newrelic/newrelic/newrelic-api.jar ./newrelic-api.jar && \
     rm -rf newrelic newrelic-java.zip
 
-# Download the NanoHTTPD JAR file (replace with the correct version)
+# Download the NanoHTTPD JAR file
 RUN curl -o nanohttpd.jar https://repo1.maven.org/maven2/org/nanohttpd/nanohttpd/2.3.1/nanohttpd-2.3.1.jar
+
+# Download the SQLite JDBC driver JAR file (replace with the correct version)
+RUN curl -o sqlite-jdbc.jar https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar
 
 # Download the Apache HttpClient JAR files (replace with the correct versions)
 RUN curl -o httpclient.jar https://repo1.maven.org/maven2/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar && \
@@ -22,10 +25,10 @@ RUN curl -o httpclient.jar https://repo1.maven.org/maven2/org/apache/httpcompone
     curl -o commons-logging.jar https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar
 
 # Copy the client's source code into the container
-COPY src/com/newrelic/java-example /usr/src/app/com/newrelic/java-example
+COPY src/com/newrelic/example /usr/src/app/com/newrelic/example
 
 # Compile the Java application with the New Relic agent, New Relic API, NanoHTTPD, and Apache HttpClient on the classpath
-RUN javac -cp ".:newrelic-agent.jar:newrelic-api.jar:nanohttpd.jar:httpclient.jar:httpcore.jar:commons-logging.jar" com/newrelic/java-example/NewRelicApiExample.java
+RUN javac -cp ".:newrelic-agent.jar:newrelic-api.jar:nanohttpd.jar:httpclient.jar:httpcore.jar:commons-logging.jar:sqlite-jdbc.jar" com/newrelic/example/NewRelicApiExample.java
 
 # Run the client when the container launches, including the New Relic agent, New Relic API, NanoHTTPD, and Apache HttpClient on the classpath
-CMD ["java", "-cp", ".:newrelic-agent.jar:newrelic-api.jar:nanohttpd.jar:httpclient.jar:httpcore.jar:commons-logging.jar", "com.newrelic.java-example.NewRelicApiExample"]
+CMD ["java", "-javaagent:newrelic-agent.jar", "-cp", ".:newrelic-agent.jar:newrelic-api.jar:nanohttpd.jar:httpclient.jar:httpcore.jar:commons-logging.jar:sqlite-jdbc.jar", "com.newrelic.example.NewRelicApiExample"]

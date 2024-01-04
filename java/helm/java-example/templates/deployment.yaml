@@ -22,7 +22,7 @@ spec:
             - containerPort: 8080
           volumeMounts:
             - name: newrelic-config-volume
-              mountPath: /usr/src/app/newrelic/newrelic.yml
+              mountPath: /usr/src/app/newrelic.yml
               subPath: newrelic.yml
       volumes:
         - name: newrelic-config-volume
@@ -56,7 +56,7 @@ spec:
             - containerPort: 8081
           volumeMounts:
             - name: newrelic-config-volume
-              mountPath: /usr/src/app/newrelic/newrelic.yml
+              mountPath: /usr/src/app/newrelic.yml
               subPath: newrelic.yml
       volumes:
         - name: newrelic-config-volume
